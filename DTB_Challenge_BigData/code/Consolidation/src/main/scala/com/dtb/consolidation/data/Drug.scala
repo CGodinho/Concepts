@@ -1,8 +1,7 @@
-package com.daimler.consolidation.data
+package com.dtb.consolidation.data
 
-import scala.util.matching.Regex
-import com.daimler.consolidation.Field
-import com.daimler.consolidation.Constants
+import util.matching.Regex
+import com.dtb.consolidation.{Constants, Field}
 
 
 /**

@@ -1,4 +1,4 @@
-package com.daimler.consolidation.data
+package com.dtb.consolidation.data
 
 import scala.util.matching.Regex
 

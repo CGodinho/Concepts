@@ -1,4 +1,4 @@
-package com.daimler.consolidation
+package com.dtb.consolidation
 
 import java.net.URL
 import scala.io.Source
@@ -6,15 +6,11 @@ import java.util.Calendar
 import org.apache.spark.rdd.RDD
 import java.text.SimpleDateFormat
 import java.net.HttpURLConnection
-import com.daimler.consolidation.hdfs.Hdfs
-import com.daimler.consolidation.data.Drug
+import com.dtb.consolidation.data._
 import scala.collection.mutable.ArrayBuffer
 import org.apache.spark.broadcast.Broadcast
-import com.daimler.consolidation.data.Entity
-import com.daimler.consolidation.data.Physician
 import org.apache.spark.{SparkConf, SparkContext}
-import com.daimler.consolidation.data.Prescription
-import com.daimler.consolidation.data.EntityCompanion
+import com.dtb.consolidation.fs.{Hdfs, Local, Storage}
 
 
 /**
@@ -137,40 +133,40 @@ object Manager {
      * The # of arguments is validated before call.
      * In case of an URL in input file, it checks for file availabilty in the HTTP URL.
      *
-     * @param hdfs - reference to HDFS
+     * @param storage - reference to a file system
      * @param args - application arguments
      */
-    private def validateArgs(hdfs: Hdfs, args: Array[String]) {
+    private def validateArgs(storage: Storage, args: Array[String]) {
 
-        val basePath = s"${hdfs.getUri}//${args(1)}"
-        if (!hdfs.isLocation(basePath)) throw new IllegalArgumentException(s"Invalid base path [${basePath}]!")
+        val basePath = s"${storage.getUri}/${args(1)}"
+        if (!storage.isLocation(basePath)) throw new IllegalArgumentException(s"Invalid base path [${basePath}]!")
 
         if (isWebURL(args(2))) {
             if (!isWebFile(args(2))) throw new IllegalArgumentException(s"Invalid Drug URL [${args(2)}]!")
         }
         else {
-            val drugFile = s"${hdfs.getUri}//${args(1)}/${Constants.InputBaseLocation}/${args(2)}"
-            if (!hdfs.isLocation(drugFile)) throw new IllegalArgumentException(s"Invalid Drug file [${drugFile}]!")
+            val drugFile = s"${storage.getUri}/${args(1)}/${Constants.InputBaseLocation}/${args(2)}"
+            if (!storage.isLocation(drugFile)) throw new IllegalArgumentException(s"Invalid Drug file [${drugFile}]!")
         }
 
         if (isWebURL(args(3))) {
             if (!isWebFile(args(3))) throw new IllegalArgumentException(s"Invalid Physician URL [${args(3)}]!")
         }
         else {
-            val physicianFile = s"${hdfs.getUri}//${args(1)}/${Constants.InputBaseLocation}/${args(3)}"
-            if (!hdfs.isLocation(physicianFile)) throw new IllegalArgumentException(s"Invalid Physician file [${physicianFile}]!")
+            val physicianFile = s"${storage.getUri}/${args(1)}/${Constants.InputBaseLocation}/${args(3)}"
+            if (!storage.isLocation(physicianFile)) throw new IllegalArgumentException(s"Invalid Physician file [${physicianFile}]!")
         }
 
         if (isWebURL(args(4))) {
             if (!isWebFile(args(4))) throw new IllegalArgumentException(s"Invalid Prescription URL [${args(4)}]!")
         }
         else {
-            val prescriptionFile = s"${hdfs.getUri}//${args(1)}/${Constants.InputBaseLocation}/${args(4)}"
-            if (!hdfs.isLocation(prescriptionFile)) throw new IllegalArgumentException(s"Invalid Prescription file [${prescriptionFile}]!")
+            val prescriptionFile = s"${storage.getUri}/${args(1)}/${Constants.InputBaseLocation}/${args(4)}"
+            if (!storage.isLocation(prescriptionFile)) throw new IllegalArgumentException(s"Invalid Prescription file [${prescriptionFile}]!")
         }
 
-        val outputPath = s"${hdfs.getUri}//${args(1)}/${Constants.OutputBaseLocation}"
-        if (!hdfs.isLocation(outputPath)) throw new IllegalArgumentException(s"Invalid output path [${outputPath}]!")
+        val outputPath = s"${storage.getUri}/${args(1)}/${Constants.OutputBaseLocation}"
+        if (!storage.isLocation(outputPath)) throw new IllegalArgumentException(s"Invalid output path [${outputPath}]!")
     }
 
 
@@ -186,13 +182,13 @@ object Manager {
      * @param args - application arguments;
      * @return - returned data as RDD of theentity registered.
      */
-    private def parseWithValidationNoRepetition[A <: Entity](sc : SparkContext,  hdfs : Hdfs,  hadoopBasePath : String, file : String) (implicit entity: EntityCompanion[A]) : RDD[Entity] =  {
+    private def parseWithValidationNoRepetition[A <: Entity](sc : SparkContext,  storage : Storage,  hadoopBasePath : String, file : String) (implicit entity: EntityCompanion[A]) : RDD[Entity] =  {
 
         // Read all lines and add an id for line identification
         val raw = if (isWebURL(file))
             webFile(sc, file)
         else
-            sc.textFile(s"${hdfs.getUri}/${hadoopBasePath}/${Constants.InputBaseLocation}/${file}", Constants.RDDPartitions).zipWithIndex
+            sc.textFile(s"${storage.getUri}/${hadoopBasePath}/${Constants.InputBaseLocation}/${file}", Constants.RDDPartitions).zipWithIndex
 
         // Validate which lines are correct and tag them
         val validated = raw.map{x =>
@@ -205,7 +201,8 @@ object Manager {
         val ok    = validated.filter(_._1 == Constants.ResultOk).map(x => (x._2, x._3))
         val error = validated.filter(_._1 == Constants.ResultError).map(_._4)
         if (error.collect.length > 0)
-            hdfs.writeRDD2File(s"${hadoopBasePath}/${Constants.OutputBaseLocation}/${reuseFileName(file)}.error",s"${hadoopBasePath}/${Constants.OutputBaseLocation}", error)
+          storage.writeRDD2File(s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}/${reuseFileName(file)}.error",
+                                s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}", error)
 
         // Find duplicated keys and clean up
         val keysWithLines = ok.map{x => val fields = Field.tokens(entity.separator, entity.quote, x._1)
@@ -216,7 +213,8 @@ object Manager {
         val keysError = keysWithLinesGrouped.filter(_._2._1 > 1)
         val keysErrorFlatten = keysError.map(error => s"Repeated key [${error._1}] times [${error._2._1}] in lines [${error._2._2}]")
         if (keysErrorFlatten.collect.length > 0)
-            hdfs.writeRDD2File(s"${hadoopBasePath}/${Constants.OutputBaseLocation}/${reuseFileName(file)}.dup",s"${hadoopBasePath}/${Constants.OutputBaseLocation}", keysErrorFlatten)
+          storage.writeRDD2File(s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}/${reuseFileName(file)}.dup",
+                                s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}", keysErrorFlatten)
 
         val keyValue = ok.map{x => val fields = Field.tokens(entity.separator, entity.quote, x._1)
                                    (entity.key(x._1, fields), (x._1, fields))}
@@ -229,19 +227,19 @@ object Manager {
      * Duplicated elements are processed and a unique instance returned.
      *
      * @param sc - reference to Spark Context;
-     * @param hdfs - reference to HDFS;
+     * @param  - reference to a file system;
      * @param hadoopBasePath - HADOOP base path for application;
      * @param file - input file path;
      * @param args - application arguments;
      * @return - returned data as RDD of the entity registered.
      */
-    private def parseWithValidationUniqueRepetition[A <: Entity](sc : SparkContext,  hdfs : Hdfs, hadoopBasePath : String, file : String) (implicit entity: EntityCompanion[A]) : RDD[Entity] = {
+    private def parseWithValidationUniqueRepetition[A <: Entity](sc : SparkContext, storage: Storage, hadoopBasePath : String, file : String) (implicit entity: EntityCompanion[A]) : RDD[Entity] = {
 
         // Read all lines and add an id for line identification
         val raw = if (isWebURL(file))
             webFile(sc, file)
         else
-            sc.textFile(s"${hdfs.getUri}/${hadoopBasePath}/${Constants.InputBaseLocation}/${file}", Constants.RDDPartitions).zipWithIndex
+            sc.textFile(s"${storage.getUri}/${hadoopBasePath}/${Constants.InputBaseLocation}/${file}", Constants.RDDPartitions).zipWithIndex
 
         // Validate which lines are correct and tag them
         val validated = raw.map { x =>
@@ -253,7 +251,8 @@ object Manager {
         val ok = validated.filter(_._1 == Constants.ResultOk).map(_._2)
         val error = validated.filter(_._1 == Constants.ResultError).map(_._4)
         if (error.collect.length > 0)
-            hdfs.writeRDD2File(s"${hadoopBasePath}/${Constants.OutputBaseLocation}/${reuseFileName(file)}.error",s"${hadoopBasePath}/${Constants.OutputBaseLocation}", error)
+            storage.writeRDD2File(s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}/${reuseFileName(file)}.error",
+                                  s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}", error)
 
         // Find duplicated keys and keep 1
         val keysWithLines = ok.map (x => (entity.key(x,  Field.tokens(entity.separator, entity.quote, x)), x))
@@ -265,13 +264,13 @@ object Manager {
      * Generates the final consolidated data set from the 3 original datasets.
      *
      * @param sc - reference to Spark Context;
-     * @param hdfs - reference to HDFS;
+     * @param storage - reference to a file system;
      * @param drugs - Parsed drugs dataset in RDD[Drugs];
      * @param physicians - Parsed Physician dataset with RDD[Physician];
      * @param prescriptions- Parsed Prescription dataset with RDD[Prescription];
      * @return - returned data as RDD[String]
      */
-    private def generateConsolidation(sc : SparkContext, hdfs : Hdfs, broadcastMapDrugs: Broadcast[Map[(String, String), String]], physicians : RDD[Physician], prescriptions : RDD[Prescription]) : RDD[String] = {
+    private def generateConsolidation(sc : SparkContext, storage : Storage, broadcastMapDrugs: Broadcast[Map[(String, String), String]], physicians : RDD[Physician], prescriptions : RDD[Prescription]) : RDD[String] = {
 
         val physiciansKeyValue = physicians.map(x => (x.npi, x.medicalSchool))
         val prescriptionsNpiKeyValue = prescriptions.map(x => (x.npi, x))
@@ -297,12 +296,13 @@ object Manager {
 
         val config = getSparkConf
         val os = System.getProperty("os.name")
-        if (os.matches("Windows.*")) config.setMaster("local")
+        if (os.matches("Windows.*|Mac.*")) config.setMaster("local[*]")
         val sc = new SparkContext(config)
-        val hdfs = new Hdfs()
+        val storage : Storage = if (args(0).equalsIgnoreCase(Constants.LocalFS)) new Local() else new Hdfs()
 
         var mainLog = sc.parallelize(Seq(""))
         mainLog = logRDD(sc, mainLog, "Starting Consolidation ...")
+        mainLog = logRDD(sc, mainLog, "... Detected OS: " + os)
         mainLog = logRDD(sc, mainLog, "... Received arguments:")
         mainLog = logRDD(sc, mainLog, s"...... 0 - HDFS config: ${args(0)}")
         mainLog = logRDD(sc, mainLog, s"...... 1 - HADOOP base path: ${args(1)}")
@@ -311,8 +311,8 @@ object Manager {
         mainLog = logRDD(sc, mainLog, s"...... 4 - Prescription input file name: ${args(4)}")
         mainLog = logRDD(sc, mainLog, s"...... 5 - Consolidation output file name: ${args(5)}")
 
-        hdfs.connect(args(0))
-        validateArgs(hdfs, args)
+        storage.connect(args(0))
+        validateArgs(storage, args)
         val hadoopBasePath = args(1)
         val drugFile = args(2)
         val physicianFile = args(3)
@@ -320,28 +320,30 @@ object Manager {
         val consolidationFile = args(5)
 
         mainLog = logRDD(sc, mainLog, "... Processing Drugs dataset ...")
-        val drugs = parseWithValidationNoRepetition[Drug](sc, hdfs, hadoopBasePath, drugFile).map(_.asInstanceOf[Drug]).cache
+        val drugs = parseWithValidationNoRepetition[Drug](sc, storage, hadoopBasePath, drugFile).map(_.asInstanceOf[Drug]).cache
         val mapDrugs = drugs.map(x => ((x.simpleName, x.genericName), s"${x.opioid},${x.longActingOpioid},${x.antibiotic},${x.antipsychotic}")).collect.toMap
         val broadcastMapDrugs = sc.broadcast(mapDrugs)
         mainLog = logRDD(sc, mainLog, "... Drugs dataset processed!")
 
         mainLog = logRDD(sc, mainLog, "... Processing Physicians dataset ...")
-        val physicians = parseWithValidationUniqueRepetition[Physician](sc, hdfs,hadoopBasePath, physicianFile).map(_.asInstanceOf[Physician]).cache
+        val physicians = parseWithValidationUniqueRepetition[Physician](sc, storage, hadoopBasePath, physicianFile).map(_.asInstanceOf[Physician]).cache
         mainLog = logRDD(sc, mainLog, "... Physicians dataset processed!")
 
         mainLog = logRDD(sc, mainLog, "... Processing Prescriptions dataset ...")
-        val prescriptions = parseWithValidationNoRepetition[Prescription](sc, hdfs, hadoopBasePath, prescriptionFile).map(_.asInstanceOf[Prescription]).filter(!_.npi1stName.isEmpty).cache
+        val prescriptions = parseWithValidationNoRepetition[Prescription](sc, storage, hadoopBasePath, prescriptionFile).map(_.asInstanceOf[Prescription]).filter(!_.npi1stName.isEmpty).cache
         mainLog = logRDD(sc, mainLog, "... Prescriptions dataset processed!")
 
         mainLog = logRDD(sc, mainLog, "... Generating Consolidation dataset ...")
-        val consolidation = generateConsolidation(sc, hdfs, broadcastMapDrugs, physicians, prescriptions)
-        hdfs.writeRDD2File(s"${hadoopBasePath}/${Constants.OutputBaseLocation}/${consolidationFile}",s"${hadoopBasePath}/${Constants.OutputBaseLocation}", consolidation)
-        mainLog = logRDD(sc, mainLog, s"... Consolidation generated and written to ${s"${hadoopBasePath}/${Constants.OutputBaseLocation}/${consolidationFile}"}")
+        val consolidation = generateConsolidation(sc, storage, broadcastMapDrugs, physicians, prescriptions)
+        storage.writeRDD2File(s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}/${consolidationFile}",
+                              s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}", consolidation)
+        mainLog = logRDD(sc, mainLog, s"... Consolidation generated and written to ${s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}/${consolidationFile}"}")
 
         mainLog = logRDD(sc, mainLog, "Finished Consolidation!")
-        hdfs.writeRDD2File(s"${hadoopBasePath}/${Constants.OutputBaseLocation}/consolidation.${getTimeString}.log", s"${hadoopBasePath}/${Constants.OutputBaseLocation}", mainLog)
+        storage.writeRDD2File(s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}/consolidation.${getTimeString}.log",
+                              s"${storage.getUri}/${hadoopBasePath}/${Constants.OutputBaseLocation}", mainLog)
 
         sc.stop
-        hdfs.disconnect
+        storage.disconnect
   }
 }

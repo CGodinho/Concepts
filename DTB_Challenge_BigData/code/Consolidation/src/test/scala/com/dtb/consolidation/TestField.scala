@@ -1,7 +1,7 @@
-package test.scala.com.daimler.consolidation
+package com.dtb.consolidation
 
 import org.scalatest.FunSuite
-import com.daimler.consolidation.Field
+
 
 
 /**
@@ -52,5 +52,3 @@ class TestField extends FunSuite {
         assert(Field.tokens(',', '"', "Hello, \"w,o,r,l,d\",!") == List(-1, 5, 18, 20))
     }
 }
-
-

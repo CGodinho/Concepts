@@ -1,4 +1,4 @@
-package com.daimler.consolidation
+package com.dtb.consolidation
 
 import util.matching.Regex
 
@@ -42,6 +42,9 @@ object Constants {
 
     // Partitions used when loading data into RDDs
     final val  RDDPartitions: Int = 8
+
+    // Flag local file system
+    final val LocalFS = "local"
 
     // Header descriptor for fina lConsolidation Dataset
     final val HeaderConsolidation : String = "npi,drug_simple_name,drug_generic_name,bene_count,total_claim_count,medical_school,drug_opioid_flag,drug_long_acting_opioid_flag,drug_antibiotic_flag,drug_antipsychotic_flag"
