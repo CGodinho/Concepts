@@ -1,0 +1,18 @@
+2019-04-19 23:23:21:752 - Starting Consolidation ...
+2019-04-19 23:23:21:765 - ... Detected OS: Mac OS X
+2019-04-19 23:23:21:769 - ... Received arguments:
+2019-04-19 23:23:21:771 - ...... 0 - HDFS config: local
+2019-04-19 23:23:21:773 - ...... 1 - HADOOP base path: /Users/carlosgodinho/consolidation
+2019-04-19 23:23:21:774 - ...... 2 - Drug input file name: PartD_Prescriber_PUF_Drug_Ntl_15.csv
+2019-04-19 23:23:21:775 - ...... 3 - Physician input file name: Physician_Compare_National_Downloadable_File_2015.csv
+2019-04-19 23:23:21:777 - ...... 4 - Prescription input file name: PartD_Prescriber_PUF_NPI_Drug_15.txt
+2019-04-19 23:23:21:779 - ...... 5 - Consolidation output file name: Consolidation.csv
+2019-04-19 23:23:21:781 - ... Processing Drugs dataset ...
+2019-04-19 23:24:07:968 - ... Drugs dataset processed!
+2019-04-19 23:24:07:969 - ... Processing Physicians dataset ...
+2019-04-19 23:24:21:884 - ... Physicians dataset processed!
+2019-04-19 23:24:21:885 - ... Processing Prescriptions dataset ...
+2019-04-19 23:27:21:395 - ... Prescriptions dataset processed!
+2019-04-19 23:27:21:396 - ... Generating Consolidation dataset ...
+2019-04-19 23:32:26:107 - ... Consolidation generated and written to file:////Users/carlosgodinho/consolidation/output/Consolidation.csv
+2019-04-19 23:32:26:108 - Finished Consolidation!

@@ -1,0 +1,1 @@
+../spark-2.4.0/bin/spark-submit --class "com.dtb.consolidation.Manager" --executor-memory 4G --driver-memory 8G consolidation_2.11-*.jar local /Users/carlosgodinho/consolidation PartD_Prescriber_PUF_Drug_Ntl_15.csv Physician_Compare_National_Downloadable_File_2015.csv PartD_Prescriber_PUF_NPI_Drug_15.txt Consolidation.csv
