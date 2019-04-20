@@ -1,0 +1,18 @@
+2019-04-19 22:12:29:816 - Starting Consolidation ...
+2019-04-19 22:12:29:842 - ... Detected OS: Windows 10
+2019-04-19 22:12:29:851 - ... Received arguments:
+2019-04-19 22:12:29:854 - ...... 0 - HDFS config: local
+2019-04-19 22:12:29:857 - ...... 1 - HADOOP base path: C:/dtb/consolidation/
+2019-04-19 22:12:29:860 - ...... 2 - Drug input file name: Drug_t1.csv
+2019-04-19 22:12:29:864 - ...... 3 - Physician input file name: Physician_t1.csv
+2019-04-19 22:12:29:867 - ...... 4 - Prescription input file name: Prescription_t1.txt
+2019-04-19 22:12:29:871 - ...... 5 - Consolidation output file name: Consolidation.csv
+2019-04-19 22:12:29:884 - ... Processing Drugs dataset ...
+2019-04-19 22:13:45:178 - ... Drugs dataset processed!
+2019-04-19 22:13:45:180 - ... Processing Physicians dataset ...
+2019-04-19 22:13:46:725 - ... Physicians dataset processed!
+2019-04-19 22:13:46:725 - ... Processing Prescriptions dataset ...
+2019-04-19 22:13:49:183 - ... Prescriptions dataset processed!
+2019-04-19 22:13:49:185 - ... Generating Consolidation dataset ...
+2019-04-19 22:13:52:672 - ... Consolidation generated and written to file:///C:/dtb/consolidation//output/Consolidation.csv
+2019-04-19 22:13:52:674 - Finished Consolidation!
