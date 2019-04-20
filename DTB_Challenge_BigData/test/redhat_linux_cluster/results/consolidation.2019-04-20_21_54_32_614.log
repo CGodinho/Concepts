@@ -1,0 +1,18 @@
+2019-04-20 21:41:30:509 - Starting Consolidation ...
+2019-04-20 21:41:30:529 - ... Detected OS: Linux
+2019-04-20 21:41:30:538 - ... Received arguments:
+2019-04-20 21:41:30:548 - ...... 0 - HDFS config: /opt/hadoop-2.9.2/etc/hadoop/core-site.xml,/opt/hadoop-2.9.2/etc/hadoop/hdfs-site.xml
+2019-04-20 21:41:30:559 - ...... 1 - HADOOP base path: /dtb/consolidation/
+2019-04-20 21:41:30:562 - ...... 2 - Drug input file name: PartD_Prescriber_PUF_Drug_Ntl_15.csv
+2019-04-20 21:41:30:567 - ...... 3 - Physician input file name: Physician_Compare_National_Downloadable_File_2015.csv
+2019-04-20 21:41:30:571 - ...... 4 - Prescription input file name: PartD_Prescriber_PUF_NPI_Drug_15.txt
+2019-04-20 21:41:30:578 - ...... 5 - Consolidation output file name: Consolidation.csv
+2019-04-20 21:41:30:787 - ... Processing Drugs dataset ...
+2019-04-20 21:43:07:976 - ... Drugs dataset processed!
+2019-04-20 21:43:07:979 - ... Processing Physicians dataset ...
+2019-04-20 21:43:41:876 - ... Physicians dataset processed!
+2019-04-20 21:43:41:878 - ... Processing Prescriptions dataset ...
+2019-04-20 21:47:58:578 - ... Prescriptions dataset processed!
+2019-04-20 21:47:58:588 - ... Generating Consolidation dataset ...
+2019-04-20 21:54:32:607 - ... Consolidation generated and written to hdfs://skoda:8020//dtb/consolidation//output/Consolidation.csv
+2019-04-20 21:54:32:610 - Finished Consolidation!
