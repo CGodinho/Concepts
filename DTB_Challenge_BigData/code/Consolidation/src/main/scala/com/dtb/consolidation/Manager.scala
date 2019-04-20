@@ -295,14 +295,13 @@ object Manager {
         if (args.length != Constants.ApplicationArgs) throw new IllegalArgumentException(s"Incorrect number of args. Received [${args.length}], expected [${Constants.ApplicationArgs}]!")
 
         val config = getSparkConf
-        val os = System.getProperty("os.name")
-        if (os.matches("Windows.*|Mac.*")) config.setMaster("local[*]")
+        if (args(0).equalsIgnoreCase(Constants.LocalFS)) config.setMaster("local[*]")
         val sc = new SparkContext(config)
         val storage : Storage = if (args(0).equalsIgnoreCase(Constants.LocalFS)) new Local() else new Hdfs()
 
         var mainLog = sc.parallelize(Seq(""))
         mainLog = logRDD(sc, mainLog, "Starting Consolidation ...")
-        mainLog = logRDD(sc, mainLog, "... Detected OS: " + os)
+        mainLog = logRDD(sc, mainLog, "... Detected OS: " + System.getProperty("os.name"))
         mainLog = logRDD(sc, mainLog, "... Received arguments:")
         mainLog = logRDD(sc, mainLog, s"...... 0 - HDFS config: ${args(0)}")
         mainLog = logRDD(sc, mainLog, s"...... 1 - HADOOP base path: ${args(1)}")
@@ -310,13 +309,13 @@ object Manager {
         mainLog = logRDD(sc, mainLog, s"...... 3 - Physician input file name: ${args(3)}")
         mainLog = logRDD(sc, mainLog, s"...... 4 - Prescription input file name: ${args(4)}")
         mainLog = logRDD(sc, mainLog, s"...... 5 - Consolidation output file name: ${args(5)}")
+        validateArgs(storage, args)
 
         storage.connect(args(0))
-        validateArgs(storage, args)
-        val hadoopBasePath = args(1)
-        val drugFile = args(2)
-        val physicianFile = args(3)
-        val prescriptionFile = args(4)
+        val hadoopBasePath    = args(1)
+        val drugFile          = args(2)
+        val physicianFile     = args(3)
+        val prescriptionFile  = args(4)
         val consolidationFile = args(5)
 
         mainLog = logRDD(sc, mainLog, "... Processing Drugs dataset ...")
