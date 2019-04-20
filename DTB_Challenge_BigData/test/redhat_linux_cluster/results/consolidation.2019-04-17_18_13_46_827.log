@@ -1,0 +1,17 @@
+2019-04-17 18:01:17:303 - Starting Consolidation ...
+2019-04-17 18:01:17:428 - ... Received arguments:
+2019-04-17 18:01:17:443 - ...... 0 - HDFS config: /opt/hadoop-2.9.2/etc/hadoop/core-site.xml,/opt/hadoop-2.9.2/etc/hadoop/hdfs-site.xml
+2019-04-17 18:01:17:450 - ...... 1 - HADOOP base path: /daimler/consolidation/
+2019-04-17 18:01:17:454 - ...... 2 - Drug input file name: PartD_Prescriber_PUF_Drug_Ntl_15.csv
+2019-04-17 18:01:17:472 - ...... 3 - Physician input file name: Physician_Compare_National_Downloadable_File_2015.csv
+2019-04-17 18:01:17:481 - ...... 4 - Prescription input file name: PartD_Prescriber_PUF_NPI_Drug_15.txt
+2019-04-17 18:01:17:488 - ...... 5 - Consolidation output file name: Consolidation.csv
+2019-04-17 18:01:20:584 - ... Processing Drugs dataset ...
+2019-04-17 18:02:55:983 - ... Drugs dataset processed!
+2019-04-17 18:02:55:985 - ... Processing Physicians dataset ...
+2019-04-17 18:03:32:970 - ... Physicians dataset processed!
+2019-04-17 18:03:32:972 - ... Processing Prescriptions dataset ...
+2019-04-17 18:07:40:322 - ... Prescriptions dataset processed!
+2019-04-17 18:07:40:327 - ... Generating Consolidation dataset ...
+2019-04-17 18:13:46:820 - ... Consolidation generated and written to /daimler/consolidation//output/Consolidation.csv
+2019-04-17 18:13:46:825 - Finished Consolidation!
