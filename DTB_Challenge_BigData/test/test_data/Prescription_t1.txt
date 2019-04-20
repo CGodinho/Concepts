@@ -1,8 +1,0 @@
-npi	nppes_provider_last_org_name	nppes_provider_first_name	nppes_provider_city	nppes_provider_state	specialty_description	description_flag	drug_name	generic_name	bene_count	total_claim_count	total_30_day_fill_count	total_day_supply	total_drug_cost	bene_count_ge65	bene_count_ge65_suppress_flag	total_claim_count_ge65	ge65_suppress_flag	total_30_day_fill_count_ge65	total_day_supply_ge65	total_drug_cost_ge65
-1111111111	ENKESHAFI	ARDALAN	CUMBERLAND	MD	Internal Medicine	S	AAA	AAA1	17	27	33	990	120.01		#		#			
-1111111111	ENKESHAFI	ARDALAN	CUMBERLAND	MD	Internal Medicine	S	AAA	AAA2			15	15	450	188.85		*		*			
-1111111111	ENKESHAFI	ARDALAN	CUMBERLAND	MD	Internal Medicine	S	CCC	CCC1	16	16	16	87	139.24		#		#			
-2222222222	ENKESHAFI	ARDALAN	CUMBERLAND	MD	Internal Medicine	S	BBB	BBB1	12	12	12	96	76.09		#		#			
-2222222222	ENKESHAFI	ARDALAN	CUMBERLAND	MD	Internal Medicine	S	BBB	BBB2	15	15	15	114	119.36		#		#			
-2222222222	ENKESHAFI	ARDALAN	CUMBERLAND	MD	Internal Medicine	S	ZZZ	ZZZ1	13	24	26	780	205.46		#		#			
-6666666666	ENKESHAFI	ARDALAN	CUMBERLAND	MD	Internal Medicine	S	AAA	AAA1	12	12	13	360	34.83		*		*			
