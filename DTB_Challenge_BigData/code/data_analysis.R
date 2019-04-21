@@ -1,6 +1,8 @@
 ###############################################################################
-# This R script performs a exploratoy dataa nalysis over the 3 provided
-#datasets.
+# DTB Challenge - Exploratory Data Analysis
+#
+# This R script performs an exploratoy data analysis over the 3 provided
+# datasets.
 ###############################################################################
 
 ###############################################################################
@@ -145,3 +147,4 @@ length(prescription_drugs_unique)
 length(drugs_name_unique)
 
 (length(prescription_drugs_unique[!prescription_drugs_unique %in% drugs_name_unique]) == 0)
+

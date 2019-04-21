@@ -1,10 +1,10 @@
 SPARK_HOME="/opt/spark-2.4.0"
-CONSOLIDATION_HOME="/mnt/daimler/consolidation/"
+CONSOLIDATION_HOME="/mnt/dtb/consolidation/"
 MASTERNODE="master"
 SPARKPORT="7077"
 CONFIGS="spark.executor.extraJavaOptions=-Dlog4j.configuration=file:/opt/spark-2.4.0/conf/log4j.properties"
 NAMENODE=${MASTERNODE}:${SPARKPORT}
-HADOOP_CONSOLIDATION_HOME="/daimler/consolidation/"
+HADOOP_CONSOLIDATION_HOME="/dtb/consolidation/"
 HADOOP_CONFIG="/opt/hadoop-2.9.2/etc/hadoop/core-site.xml,/opt/hadoop-2.9.2/etc/hadoop/hdfs-site.xml"
 
 $SPARK_HOME/bin/spark-submit \
