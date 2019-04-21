@@ -15,7 +15,7 @@ Repo structure:
 * **code** - code with Spark Application (*Consolidation*) and an R script for exploratory data analysis (*data_analysis.R*)
 *  **test** - test environment details and results.
 
-## Introduction
+## Conclusion
 
 Thanks for the opportunity!
 Hope you enjoy it as I did :+1: 
