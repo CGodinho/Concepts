@@ -2,7 +2,7 @@
 
 ## Description
 
-Proposal dataset for the **Daimler Trucks & Buses Tech and Data Hub bigdata technical challenge**. It joins datasets Drugs Physician, Prescription into a single dataset.
+Proposal dataset for the **Daimler Trucks & Buses Tech and Data Hub Big Data technical challenge**. It joins datasets Drugs Physician, Prescription into a single dataset named **Consolidation**.
 
 The primary data source for these data is the CMS Chronic Conditions Data Warehouse, which contains Medicare Part D PDE records received through the claims submission cut-off date.
 
@@ -10,7 +10,7 @@ This particular dataset is related to year 2015.
 
 Data is presented in CSV format. Not available values are blank.
 
-Fields in original data which contained , and were quoted with " where parsed with the following rules:
+Fields in original data which contains , and are quoted with ", are parsed with the following rules:
 * 1 - , replaced by ;
 * 2 - surrounding " removed
 
