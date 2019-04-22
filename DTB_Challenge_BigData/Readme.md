@@ -4,7 +4,7 @@ This repo contains the answer to the **Daimler :truck: & :bus: Tech and Data Hub
 
 ## Introduction
 
-The main doc, with results and guidelines, is located [in doc/results.pdf](https://github.com/CGodinho/Concepts/blob/master/DTB_Challange_BigData/doc/results.pdf).
+The main doc, with results and guidelines, is located [in doc/results.pdf](https://github.com/CGodinho/Concepts/tree/master/DTB_Challenge_BigData/doc/results.pdf).
 The doc holds the answers and explanations to the proposed tasks. Please follow the document.
 
 ## Directories
