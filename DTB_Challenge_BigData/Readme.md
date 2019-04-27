@@ -32,4 +32,4 @@ This code is taking 3 minutes to parse, although it misses:
 * Handling of directories
 * Logging, error and duplicate handling
 
-The new SQL API seems ato be a nice surprise :grin:
+The new SQL API is a nice surprise :grin:
