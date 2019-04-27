@@ -19,3 +19,17 @@ Repo structure:
 
 Thanks for the opportunity!
 Hope you enjoy it as I did :+1: 
+
+
+# Update
+
+Unfortunately the solution was not accepted by Daimler Truck & Buses, being one of the reasons the option to use RDDs.
+As an exercise, the most basic code for the Spark SQL API is avaialable at /code/Consolidation_Alternative.
+This code is taking 3 minutes to parse, although it misses:
+
+* Complete data validation
+* Complete trim of fields
+* Handling of directories
+* Logging, error and duplicate handling
+
+The new SQL API seems ato be a nice surprise :grin:
