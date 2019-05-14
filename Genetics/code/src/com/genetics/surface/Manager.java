@@ -25,7 +25,7 @@ public class Manager {
 
         while(generation < maxGenerations) {
 
-        	// Solution found!!!
+            // Solution found!!!
             if (population.get(0).getScore() == 0) solutionAndExit(generation, population.get(0));
 
             // Print output, periodically
