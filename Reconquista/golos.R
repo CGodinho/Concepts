@@ -4,7 +4,7 @@ library(stringr)
 library(ggplot2)
 
 
-setwd("C:\\git\\Concepts\\reconquista")
+setwd("/Users/carlosgodinho/git/Concepts/Reconquista")
 
 df_golos <- read_csv("golos.csv", col_types = cols(.default = "c"))
 
@@ -89,7 +89,7 @@ df_golos_benfica
 
 ggplot(data=df_golos_benfica, aes(x = df_golos_benfica$Jornada, y = stat_bin))
 
-ggplot(data=df_golos_benfica, aes(x=Jornada)) +
+ggplot(data=df_golos_benfica, aes(x=Jornada, fill="red")) +
   geom_bar(stat="count")
   
   
@@ -126,11 +126,11 @@ df_golos_benfica %>%
   arrange(desc(Assitências))
 
 # Mais combinações Marcador-Assitências
-df_golos_benfica %>%
+View(df_golos_benfica %>%
   filter(!is.na(Assitência)) %>%
   group_by(Marcador, Assitência)%>%
   summarize(Marcador_Assitência = n()) %>%
-  arrange(desc(Marcador_Assitência))
+  arrange(desc(Marcador_Assitência)))
 
 
 
@@ -164,7 +164,7 @@ calculaPontos <- function(resultado) {
   if (resultado == "V") return(3)
   if (resultado == "E") saida <- 1
   if (resultado == "D") saida <- 10
-  return saida
+  return(saida)
 }
 
 
@@ -195,6 +195,6 @@ rle(results)$values
 jornadas
 
 ggplot(jornadas) + 
-  geom_bar(mapping = aes(x = Jornada, y = Golos_Benfica), stat = "identity", position = "dodge") + 
-  geom_bar(mapping = aes(x = Jornada, y = Golos_Adversário), stat = "identity", position = "dodge")
+  geom_bar(mapping = aes(x = Jornada, y = Golos_Benfica,fill="red"), stat = "identity", position = "dodge") + 
+  geom_bar(mapping = aes(x = Jornada, y = -Golos_Adversário, fill ="white"), stat = "identity", position = "dodge")
 
