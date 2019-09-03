@@ -80,7 +80,7 @@ Create User, DB and grant previledges
 
 
 ```
-CREATE USER raspberry IDENTIFIED BY 'pwd';
+CREATE USER raspberry IDENTIFIED BY '<password>';
 CREATE DATABASE raspberry;
 grant all privileges on raspberry.* TO 'raspberry'@'%' WITH GRANT OPTION;
 flush privileges;
@@ -102,7 +102,7 @@ comment line:
 
 ```bind-address           = 127.0.0.1```
 
-Restart the DB.
+Restart th DB.
 
 
 ### Managenent ###
@@ -125,44 +125,32 @@ Check Status
 
 
 
+### Connecting to Maria DB ###
+
+By using my sql client at raspberry pi:
+
+```mysql --user=raspberry --password=<password> raspberry```
+
+From MAC OS cli access is avaialbe with **mycli**.
+
+Install it with brew:
+
+```Brew install mycli```
+
+Connect with:
+
+cmycli -h raspberrypi -u raspberry -p pwd raspberry```
 
 
+A graphical alternative is [Sequel Pro](https://www.sequelpro.com):
+
+![Sequel_Pro](Sequel_Pro.png)
 
 
+### Table in Maria DB
 
 
-
-
-
-
-
-# Connecting ...
-mysql --user=raspberry --password=pwd raspberry
-
-
-
-
-#######################
-
-sudo pip3 install mysqlclient
-
-
-
-
-
-
-
-
-
-
-
-
-Managenent
-
-Brew install mycli
-
-
-
+```
 Drop table ‘measure’;
 
 CREATE TABLE `measure` (
@@ -170,13 +158,29 @@ CREATE TABLE `measure` (
   `temperature` float DEFAULT NULL,
   `humidity` float DEFAULT NULL,
   `pressure` float DEFAULT NULL
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+SELECT * FROM MEASURE ORDER BY timestamp desc;
+
+```
+
+
+## Code
+
+### Install Maria DB lib for Python
+
+```sudo pip3 install pymysql```
+
+
+### Execution Script
+
+The execution script is available in python with name ```weather.py```.
+
+Add **cron tab** for periodically execution:
+
+```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py```
 
 
 
-## Conclusion
-
-Thanks for the opportunity!
-Hope you enjoy it as I did :+1: 
 
