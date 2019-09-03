@@ -216,15 +216,19 @@ Add **cron tab** for periodically execution:
 
 Within the box:
 
-![box](install1.png)
+![install1](install1.png)
 
 BME280 sensor application:
 
-![box](install2.png)
+![install2](install2.png)
 
-Final monut:
+Final mount:
 
-![box](install3.png)
+![install3](install3.png)
+
+Resulting data:
+
+![result](result.png)
 
 
 ## Monitoring ##
