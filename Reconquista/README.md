@@ -1,8 +1,8 @@
-# A história da Resconqusta em números
+# A história da Reconquista em números
 
 ## Introducão 
 
-A partur de um simplesdataframe de 143x13 que incluí os detalhes mais relevantes dos golos marcados e sofridos pelo Benfica na época 2018/19.
+Um exemplo de exploratory data analysis, a partir de um dataframe de 143x13 que incluí os detalhes dos golos marcados e sofridos pelo Benfica na época 2018/19.
 
 
 ## Dados Gerais
@@ -44,14 +44,19 @@ Nacional, Aves, Tondela, Marítimo
 ### Local do golo 
 
 * Fora da área: 12
+
 * Grande área: 90
+ 
 * Penalty: 11
+ 
 * Pequena área: 21
 
 ### Golo do ponto de vista da baliza
 
 * Esquerda: 27
+
 * Direita: 25
+
 * Centro: 71
 
 
@@ -87,6 +92,6 @@ Exemplo: Seferevoic marcou, em muitos casos, o primeiro golo do Benfica num jogo
 ![combinacao](combinacao.png)
 
 
-### Golos no tempo de jogo
+### Golos por tempo de jogo
 
 ![golos no tempo](golos_no_tempo.png)
