@@ -13,11 +13,12 @@ Data is retreived from the sensor and stored in a relational database for furthe
 * Weather sensor BME 280
 * Cables
 * Breadboard for simple connections
-* Wood panel
+* Plywood board
 * Door locker
 * 2 x Corner door hinge
 * Wood glue
-* Nails
+* Metal nails
+* Power line devices for LAN access
 
 
 ## Box
@@ -32,16 +33,33 @@ Data is retreived from the sensor and stored in a relational database for furthe
 
 Cut the wood according to dimensions. Glue and nail the panels together to create the box.
 
-Apply the locker and the hinges.
+Makes holes for refrigeration.
+
+Apply the locker and the hinges to the door.
 
 Make at least 2 shelfs to better use the box.
+
+
+## Connection
+
+Using the I2C serial interface (4 connections) with the following rules:
+
+* Raspberry PI GPIO pin 1 (3.3 V) to BME VCC - power supply;
+
+* Raspberry PI GPIO pin 9 (GROUND) to BME GND - ground suply;
+
+* Raspberry PI GPIO pin 3 (I2C1 SDA) to BME SDA - data access;
+
+* Raspberry PI GPIO pin 5 (I2C1 SCL) to BME SCL - control access.
+
+![connection](connection.png)
 
 
 ## I2C
 
 BME 280 weather sensor is controlled over IC2 serial interface.
 
-Install the Raspberry PI I2C tools and the Python moduke for access.
+Install the Raspberry PI **I2C tools** and the Python module for access.
 
 Install tools to control ic2
 
@@ -55,6 +73,11 @@ Detect devices and presents the port where the device is connected.
 
 ```i2cdetect -y 1```
 
+Identify the address for the BME280:
+
+![i2c](i2c.png)
+
+In this case is **76**.
 
 
 ## Maria DB
@@ -68,7 +91,7 @@ Maria DB is selected as the realational database.
 
 ### Setup ####
 
-Run the DB hardening where root password may b e changed
+Run the DB hardening where root password may be changed.
 
 ```sudo mysql_secure_installation```
 
@@ -79,7 +102,7 @@ Access DB
 Create User, DB and grant previledges
 
 
-```
+``` sql
 CREATE USER raspberry IDENTIFIED BY '<password>';
 CREATE DATABASE raspberry;
 grant all privileges on raspberry.* TO 'raspberry'@'%' WITH GRANT OPTION;
@@ -165,7 +188,6 @@ SELECT * FROM MEASURE ORDER BY timestamp desc;
 
 ```
 
-
 ## Code
 
 ### Install Maria DB lib for Python
@@ -175,12 +197,43 @@ SELECT * FROM MEASURE ORDER BY timestamp desc;
 
 ### Execution Script
 
-The execution script is available in python with name ```weather.py```.
+The execution script is available in Python with name ```weather.py```.
+
+It uses the following Python libraries:
+
+* smbus2 - for I2C serial bus access to BME280;
+* bme280 - data transfer to BME280 weather sensor;
+* pymsql - python driver for Maria DB.
+
+The script runs, gathers data and writes into Maria DB in table **measure**.
 
 Add **cron tab** for periodically execution:
 
 ```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py```
 
 
+## Mount
 
+Within the box:
+
+![box](install1.png)
+
+BME280 sensor application:
+
+![box](install2.png)
+
+Final monut:
+
+![box](install3.png)
+
+
+## Monitoring ##
+
+Check disk space and temperature with Python script **monitor.py**.
+
+As no ventilation is being used in the box, special care about CPU temperature must be taken.
+
+The script uses library **psutil**:
+
+```sudo pip3 install psutil```
 
