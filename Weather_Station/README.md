@@ -173,7 +173,7 @@ A graphical alternative is [Sequel Pro](https://www.sequelpro.com):
 ### Table in Maria DB
 
 
-```
+``` sql
 Drop table ‘measure’;
 
 CREATE TABLE `measure` (
