@@ -241,12 +241,22 @@ The script uses library **psutil**:
 
 ```sudo pip3 install psutil```
 
-## Monitor with a web server##
+## Monitor with a web server
 
 For easier access use a web server, a simple one is lighthttpd. Install with:
 
 
 ```sudo apt install lighttpd```
+
+Management commands:
+
+```
+sudo service lighttpd force-reload
+sudo /etc/init.d/lighttpd stop
+sudo /etc/init.d/lighttpd start
+udo /etc/init.d/lighttpd status
+sudo nano /etc/lighttpd/lighttpd.conf
+```
 
 Deployment dir is available in:
 
