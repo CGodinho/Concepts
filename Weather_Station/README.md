@@ -245,7 +245,6 @@ The script uses library **psutil**:
 
 For easier access use a web server, a simple one is lighthttpd. Install with:
 
-
 ```sudo apt install lighttpd```
 
 Management commands:
@@ -271,3 +270,5 @@ A script called **weather_web.py** builds a file called **index.html** into the 
 Extend the **cron tab** to generate the page:
 
 ```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py;/usr/bin/python3 /home/pi/Python/weather_web.py```
+
+More details on lightttpd configuration for raspberrypi in  [here] (https://alirumane.github.io/2016/04/10/setting-lighttpd-on-raspberry-pi).
