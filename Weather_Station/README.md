@@ -211,8 +211,8 @@ Add **cron tab** for periodically execution:
 
 ```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py```
 
-
-## Mount
+	
+## Mount ##
 
 Within the box:
 
@@ -241,3 +241,23 @@ The script uses library **psutil**:
 
 ```sudo pip3 install psutil```
 
+## Monitor with a web server##
+
+For easier access use a web server, a simple one is lighthttpd. Install with:
+
+
+```sudo apt install lighttpd```
+
+Deployment dir is available in:
+
+```/var/www/html```
+
+Add a directory  like **weather** and the link is accesssed with:
+
+[http://raspberrypi/weather](http://raspberrypi/weather)
+
+A script called **weather_web.py** builds a file called **index.html** into the web server deployment dir ```/var/www/html/weather```.
+
+Extend the **cron tab*** to generate the page:
+
+```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py;/usr/bin/python3 /home/pi/Python/weather_web.py```
