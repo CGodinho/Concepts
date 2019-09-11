@@ -254,7 +254,7 @@ Management commands:
 sudo service lighttpd force-reload
 sudo /etc/init.d/lighttpd stop
 sudo /etc/init.d/lighttpd start
-udo /etc/init.d/lighttpd status
+sudo /etc/init.d/lighttpd status
 sudo nano /etc/lighttpd/lighttpd.conf
 ```
 
