@@ -212,7 +212,7 @@ Add **cron tab** for periodically execution:
 ```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py```
 
 	
-## Mount ##
+## Mount
 
 Within the box:
 
@@ -231,7 +231,7 @@ Resulting data:
 ![result](result.png)
 
 
-## Monitoring ##
+## Monitoring
 
 Check disk space and temperature with Python script **monitor.py**.
 
@@ -252,12 +252,12 @@ Deployment dir is available in:
 
 ```/var/www/html```
 
-Add a directory  like **weather** and the link is accesssed with:
+Add a directory like **weather** and the access link is:
 
 [http://raspberrypi/weather](http://raspberrypi/weather)
 
 A script called **weather_web.py** builds a file called **index.html** into the web server deployment dir ```/var/www/html/weather```.
 
-Extend the **cron tab*** to generate the page:
+Extend the **cron tab** to generate the page:
 
 ```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py;/usr/bin/python3 /home/pi/Python/weather_web.py```
