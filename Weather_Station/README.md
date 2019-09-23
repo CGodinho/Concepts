@@ -272,3 +272,16 @@ Extend the **cron tab** to generate the page:
 ```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py;/usr/bin/python3 /home/pi/Python/weather_web.py```
 
 More details on lightttpd configuration for raspberrypi in  [here] (https://alirumane.github.io/2016/04/10/setting-lighttpd-on-raspberry-pi).
+
+
+## ntp
+
+It is advisible to activate NTP in order to have time/date synchronized automatically.
+
+Activate NTP:
+
+```sudo timedatectl set-ntp True```
+
+Check status:
+
+```timedatectl status```
