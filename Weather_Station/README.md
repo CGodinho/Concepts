@@ -185,7 +185,12 @@ CREATE TABLE `measure` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SELECT * FROM MEASURE ORDER BY timestamp desc;
+```
 
+Add an index to timestamp for faster access:
+
+``` sql
+CREATE UNIQUE INDEX Indx_Timestamp ON measure(timestamp);
 ```
 
 ## Code
@@ -285,3 +290,39 @@ Activate NTP:
 Check status:
 
 ```timedatectl status```
+
+## Grafana
+
+Grafana is able to directly access MariaDB as a datasource and show the available measures for a timeseries interval.
+
+Install Grafana with commands:
+
+```
+wget https://dl.grafana.com/oss/release/grafana_6.4.1_armhf.deb 
+sudo dpkg -i grafana_6.4.1_armhf.deb 
+```
+ 
+ Management commands:
+
+```
+sudo service grafana-server start
+sudo service grafana-server stop
+sudo service grafana-server status
+```
+
+Dashboard available in file:
+
+```
+Weather History-1570560525333.json
+```
+
+The dashboard requires the installation of **clock panel plugin**, with command:
+
+```
+grafana-cli plugins install grafana-clock-panel
+```
+
+Dasboard look & feel:
+
+
+![grafana](grafana.png)
