@@ -319,10 +319,25 @@ Weather History-1570560525333.json
 The dashboard requires the installation of **clock panel plugin**, with command:
 
 ```
-grafana-cli plugins install grafana-clock-panel
+sudo grafana-cli plugins install grafana-clock-panel
 ```
 
 Dasboard look & feel:
 
 
 ![grafana](grafana.png)
+
+Configure **alert notification** in Grafana. Edit file ```/etc/grafana/grafana.ini``` and edit the SMTP section to:
+
+```
+[smtp]
+enabled = true
+host = smtp.gmail.com:587
+user = <acount>@gmail.com
+password = """<password>"""
+;cert_file =
+;key_file =
+skip_verify = true
+from_address = <acount>@gmail.com
+from_name=Grafana
+```
