@@ -341,3 +341,5 @@ skip_verify = true
 from_address = <acount>@gmail.com
 from_name=Grafana
 ```
+
+Activate feature [less secure apps notifications](https://myaccount.google.com/lesssecureapps) at the used google account. 
