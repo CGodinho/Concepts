@@ -4,7 +4,7 @@ library(stringr)
 library(ggplot2)
 
 
-setwd("/Users/carlosgodinho/git/Concepts/Reconquista")
+setwd("C:\\git\\Concepts\\reconquista")
 
 df_golos <- read_csv("golos.csv", col_types = cols(.default = "c"))
 
@@ -89,7 +89,7 @@ df_golos_benfica
 
 ggplot(data=df_golos_benfica, aes(x = df_golos_benfica$Jornada, y = stat_bin))
 
-ggplot(data=df_golos_benfica, aes(x=Jornada, fill="red")) +
+ggplot(data=df_golos_benfica, aes(x=Jornada)) +
   geom_bar(stat="count")
   
   
@@ -126,11 +126,11 @@ df_golos_benfica %>%
   arrange(desc(Assitências))
 
 # Mais combinações Marcador-Assitências
-View(df_golos_benfica %>%
+df_golos_benfica %>%
   filter(!is.na(Assitência)) %>%
   group_by(Marcador, Assitência)%>%
   summarize(Marcador_Assitência = n()) %>%
-  arrange(desc(Marcador_Assitência)))
+  arrange(desc(Marcador_Assitência))
 
 
 
@@ -152,7 +152,7 @@ ggplot(data = df_golos_benfica, aes(x = df_golos_benfica$Minutos)) +
 
 
 
-codeResult <- function(golos) {
+calculaResultado <- function(golos) {
   if (golos > 0) return ("V")
   if (golos < 0) return ("D")
   return("E")
@@ -160,15 +160,12 @@ codeResult <- function(golos) {
 
 
 calculaPontos <- function(resultado) {
-  saida <- 0
+  
   if (resultado == "V") return(3)
-  if (resultado == "E") saida <- 1
-  if (resultado == "D") saida <- 10
-  return(saida)
+  if (resultado == "E") return(1)
+  return(0)
 }
 
-
-calculaPontos("V")
 
 
 df_golos
@@ -183,9 +180,33 @@ jornadas <- df_golos %>%
 
 jornadas
 
+jornadas <- bind_cols(jornadas, resultado = sapply(jornadas$average, calculaResultado))
 
 
-jornadas <- bind_cols(jornadas, result = sapply(jornadas$average, codeResult))
+jornadas
+
+jornadas %>% filter(Jornada == 1) %>% select(resultado)
+
+
+
+
+pontos <- c()
+acc <- 0
+for (index in 1: 34) {
+
+  acc <- acc + calculaPontos(jornadas %>% filter(Jornada == index) %>% select(resultado))
+  pontos <- c(pontos, acc)  
+  
+  print(acc)
+}
+  
+
+
+jornadas <- bind_cols(jornadas, pontos = pontos)
+jornadas
+
+ggplot(jornadas, aes(x = Jornada, y = pontos)) + 
+  geom_point(colour = "red", aes(size = average)) 
 
 
 # consecutive results
@@ -195,6 +216,16 @@ rle(results)$values
 jornadas
 
 ggplot(jornadas) + 
-  geom_bar(mapping = aes(x = Jornada, y = Golos_Benfica,fill="red"), stat = "identity", position = "dodge") + 
-  geom_bar(mapping = aes(x = Jornada, y = -Golos_Adversário, fill ="white"), stat = "identity", position = "dodge")
+  geom_bar(mapping = aes(x = Jornada, y = Golos_Benfica), stat = "identity", position = "dodge") + 
+  geom_bar(mapping = aes(x = Jornada, y = Golos_Adversário), stat = "identity", position = "dodge")
+
+
+# quem tirou pontos ao benfica e quantos
+jornadas %>% filter(resultado %in% c("E", "D")) %>% select(Jornada, Local, Adversário, resultado) %>% arrange(Adversário, Local)
+
+x <- jornadas %>% filter(resultado %in% c("E", "D")) %>% select(resultado)
+x$resultado
+sum(sapply(x$resultado, calculaPontos))
+
+3 * length(x$resultado) - (sum(sapply(x$resultado, calculaPontos)))
 
