@@ -85,11 +85,11 @@ In this case is **76**.
 Maria DB is selected as the realational database.
 
 
-### Install ###
+### Install
 
 ```sudo apt-get install mariadb-server```
 
-### Setup ####
+### Setup
 
 Run the DB hardening where root password may be changed.
 
@@ -128,7 +128,7 @@ comment line:
 Restart th DB.
 
 
-### Managenent ###
+### Managenent
 
 Stop
 
@@ -148,7 +148,7 @@ Check Status
 
 
 
-### Connecting to Maria DB ###
+### Connecting to Maria DB
 
 By using my sql client at raspberry pi:
 
@@ -162,7 +162,7 @@ Install it with brew:
 
 Connect with:
 
-cmycli -h raspberrypi -u raspberry -p pwd raspberry```
+```cmycli -h raspberrypi -u raspberry -p pwd raspberry```
 
 
 A graphical alternative is [Sequel Pro](https://www.sequelpro.com):
@@ -246,13 +246,13 @@ The script uses library **psutil**:
 
 ```sudo pip3 install psutil```
 
-## Monitor with a web server
+## Lighttpd
 
 For easier access use a web server, a simple one is lighthttpd. Install with:
 
 ```sudo apt install lighttpd```
 
-Management commands:
+### Management
 
 ```
 sudo service lighttpd force-reload
@@ -261,6 +261,8 @@ sudo /etc/init.d/lighttpd start
 sudo /etc/init.d/lighttpd status
 sudo nano /etc/lighttpd/lighttpd.conf
 ```
+
+### Deployment
 
 Deployment dir is available in:
 
@@ -276,10 +278,36 @@ Extend the **cron tab** to generate the page:
 
 ```*/5 * * * * /usr/bin/python3 /home/pi/Python/weather.py;/usr/bin/python3 /home/pi/Python/weather_web.py```
 
+### Python CGI
+
+To enable python CGI at the server, edit configuration file ```/etc/lighttpd/lighttpd.conf``` and uncomment:
+
+```
+server.modules = (
+        "mod_access",
+        "mod_alias",
+        "mod_compress",
+        "mod_redirect",
+        "mod_cgi",
+        "mod_rewrite",
+)
+```
+
+At the end of the file add:
+
+```
+$HTTP["url"] =~ "^/cgi-bin/" {
+    cgi.assign = (".py" => "/usr/bin/python3")
+}
+```
+
+Note that in this configuration it is necessary to place the Python scripts in dir ```<server.document-root>/cgi-bin```. 
+
+
 More details on lightttpd configuration for raspberrypi in  [here] (https://alirumane.github.io/2016/04/10/setting-lighttpd-on-raspberry-pi).
 
 
-## ntp
+## ntp ##
 
 It is advisible to activate NTP in order to have time/date synchronized automatically.
 
@@ -291,7 +319,7 @@ Check status:
 
 ```timedatectl status```
 
-## Grafana
+## Grafana ##
 
 Grafana is able to directly access MariaDB as a datasource and show the available measures for a timeseries interval.
 
