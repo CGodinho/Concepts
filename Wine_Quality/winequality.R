@@ -8,6 +8,10 @@ set.seed(2510)
 ##############################################################################
 # Imports
 ##############################################################################
+
+install.packages("e1071")
+
+
 library(readr)
 library(caret)
 library(party)
@@ -28,7 +32,7 @@ registerDoParallel(cl)
 ###############################################################################
 # Load data
 ###############################################################################
-setwd("C:/work/programming/R/ml-winw_quality")
+setwd("c:/git/Concepts/Wine_Quality/")
 trainingFile <- read.csv("winequality-white.csv", sep = ";", na.strings = c("NA", ""))
 View(trainingFile)
 
@@ -111,6 +115,7 @@ trainingSet
 # Caret with random forest
 ###############################################################################
 fitControl <- trainControl(method = "repeatedcv", repeats = 5, classProbs = TRUE)
+
 
 grid <- expand.grid(.interaction.depth = seq(1, 10, by = 1),
                     .n.trees = seq(100, 2000, by = 50),
